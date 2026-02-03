@@ -6,7 +6,7 @@ import { InteractiveGridPattern } from "../InteractiveGrid";
 
 export default function LoginPage() {
   return (
-    <div className="relative h-screen overflow-hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-black">
+    <div className="relative h-screen overflow-hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-[#111112]">
       <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
         <div className="absolute inset-0 bg-zinc-900" />
         <div className="relative z-20 flex items-center text-lg font-medium">
