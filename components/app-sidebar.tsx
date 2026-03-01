@@ -1,105 +1,178 @@
 "use client";
 
-import Link from "next/link";
+import { useState } from "react";
+import { Zap, ChevronRight } from "lucide-react";
+
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarProvider,
 } from "@/components/ui/sidebar";
 
-import { BoxIcon, LayoutDashboard, User, TagsIcon, Badge } from "lucide-react";
+const navItems = [
+  "Overview",
+  "Leads",
+  "Pipeline",
+  "Analytics",
+  "Campaigns",
+  "Integrations",
+] as const;
 
-const navigationSection = [
-  {
-    label: "Main",
-    items: [
-      {
-        title: "Dashboard",
-        icon: LayoutDashboard,
-        href: "/",
-        disabled: false,
-      },
-      {
-        title: "Users",
-        icon: User,
-        href: "/users",
-        disabled: false,
-      },
-      {
-        title: "Leads",
-        icon: TagsIcon,
-        href: "/admin/categories",
-        disabled: false,
-      },
-      {
-        title: "Pipeline",
-        icon: Badge,
-        href: "/admin/brands",
-        disabled: false,
-      },
-    ],
-  },
-];
+type NavItem = (typeof navItems)[number];
 
 export function AppSidebar() {
+  const [activeNav, setActiveNav] = useState<NavItem>("Overview");
+
   return (
-    <Sidebar className="dark">
-      <SidebarHeader />
+    <Sidebar className="bg-[#0D1018]">
+      <SidebarHeader
+        style={{
+          padding: "28px 16px 0 16px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            marginBottom: "40px",
+            paddingLeft: "8px",
+          }}
+        >
+          <div
+            style={{
+              width: "32px",
+              height: "32px",
+              borderRadius: "8px",
+              background: "linear-gradient(135deg, #6EE7B7, #818CF8)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Zap size={16} color="#0F111A" strokeWidth={2.5} />
+          </div>
+          <span
+            style={{
+              fontWeight: 700,
+              fontSize: "15px",
+              letterSpacing: "-0.02em",
+              color: "#E5E7EB",
+            }}
+          >
+            NextCRM
+          </span>
+        </div>
+      </SidebarHeader>
 
-      <SidebarContent>
-        {navigationSection.map((section) => (
-          <SidebarGroup key={section.label}>
-            <div className="relative z-20 flex items-center text-lg font-medium text-white mb-5">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="mr-2 h-6 w-6"
-              >
-                <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
-              </svg>
-              NextCRM
-            </div>
-            <SidebarMenu>
-              {section.items.map((item) => {
-                const Icon = item.icon;
-
-                return (
-                  <SidebarMenuItem
-                    key={item.title}
-                    className="hover:bg-gray-800 rounded"
-                  >
-                    <SidebarMenuButton asChild disabled={item.disabled}>
-                      <Link
-                        href={item.href}
-                        className="text-white"
-                        target={
-                          item.href.startsWith("http") ? "_blank" : undefined
-                        }
-                      >
-                        <Icon className="mr-2 h-4 w-4" />
-                        {item.title}
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroup>
-        ))}
+      <SidebarContent style={{ padding: "0 16px" }}>
+        <SidebarMenu
+          style={{ display: "flex", flexDirection: "column", gap: "4px" }}
+        >
+          {navItems.map((item) => {
+            const isActive = activeNav === item;
+            return (
+              <SidebarMenuItem key={item}>
+                <SidebarMenuButton
+                  isActive={isActive}
+                  onClick={() => setActiveNav(item)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    padding: "9px 12px",
+                    borderRadius: "9px",
+                    border: "none",
+                    borderLeft: isActive
+                      ? "2px solid #6EE7B7"
+                      : "2px solid transparent",
+                    background: isActive
+                      ? "rgba(110,231,183,0.1)"
+                      : "transparent",
+                    color: isActive ? "#6EE7B7" : "#6B7280",
+                    fontSize: "13px",
+                    fontWeight: isActive ? 600 : 400,
+                    cursor: "pointer",
+                    transition: "all 0.15s",
+                    width: "100%",
+                    textAlign: "left",
+                    fontFamily: "'Sora', sans-serif",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.background =
+                        "rgba(255,255,255,0.04)";
+                      e.currentTarget.style.color = "#9CA3AF";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.background = "transparent";
+                      e.currentTarget.style.color = "#6B7280";
+                    }
+                  }}
+                >
+                  {item}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
       </SidebarContent>
 
-      <SidebarFooter>t</SidebarFooter>
+      <SidebarFooter style={{ padding: "0 16px 28px 16px" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            padding: "12px",
+            borderRadius: "10px",
+            background: "rgba(255,255,255,0.03)",
+            border: "1px solid rgba(255,255,255,0.06)",
+          }}
+        >
+          <div
+            style={{
+              width: "32px",
+              height: "32px",
+              borderRadius: "8px",
+              background: "linear-gradient(135deg, #818CF8, #F9A8D4)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "11px",
+              fontWeight: 700,
+              color: "#fff",
+              flexShrink: 0,
+            }}
+          >
+            AK
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div
+              style={{ fontSize: "12px", fontWeight: 600, color: "#E5E7EB" }}
+            >
+              Alex Kim
+            </div>
+            <div style={{ fontSize: "11px", color: "#6B7280" }}>Admin</div>
+          </div>
+          <ChevronRight size={13} color="#4B5563" />
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
+}
+
+export function AppSidebarProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <SidebarProvider>{children}</SidebarProvider>;
 }
