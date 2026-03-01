@@ -28,6 +28,7 @@ import {
   ChevronRight,
   LucideIcon,
 } from "lucide-react";
+import React from "react";
 
 type LeadStatus =
   | "New"
@@ -76,6 +77,11 @@ interface StatCardProps {
   positive: boolean;
   color: string;
   delay: number;
+}
+interface CardShellProps {
+  className?: string;
+  style?: React.CSSProperties;
+  children: React.ReactNode;
 }
 interface TooltipPayloadItem {
   color?: string;
@@ -256,15 +262,10 @@ const StatCard = ({
   </div>
 );
 
-const CardShell = ({
-  className = "",
-  children,
-}: {
-  className?: string;
-  children: React.ReactNode;
-}) => (
+const CardShell = ({ className = "", style, children }: CardShellProps) => (
   <div
     className={`rounded-2xl border border-white/[0.07] bg-gradient-to-br from-white/[0.04] to-white/[0.02] p-6 ${className}`}
+    style={style}
   >
     {children}
   </div>
@@ -299,7 +300,6 @@ export default function Dashboard() {
       `}</style>
 
       <div className="overflow-auto">
-        {/* Header */}
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/[0.05] bg-[rgba(9,11,18,0.85)] px-8 py-6 backdrop-blur-xl">
           <div>
             <h1 className="text-lg font-bold tracking-tight">
@@ -323,9 +323,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Body */}
         <div className="p-8">
-          {/* Stat Cards */}
           <div className="mb-7 grid grid-cols-4 gap-4">
             <StatCard
               icon={Users}
@@ -365,7 +363,6 @@ export default function Dashboard() {
             />
           </div>
 
-          {/* Row 2: Area + Pie */}
           <div
             className="mb-4 grid gap-4"
             style={{
@@ -373,7 +370,6 @@ export default function Dashboard() {
               animation: "slideUp 0.6s ease 0.4s both",
             }}
           >
-            {/* Lead Velocity */}
             <CardShell>
               <div className="mb-6 flex items-start justify-between">
                 <div>
@@ -386,11 +382,7 @@ export default function Dashboard() {
                   {(["1M", "3M", "6M", "1Y"] as const).map((t, i) => (
                     <button
                       key={t}
-                      className={`rounded-md px-2.5 py-1 text-[11px] transition ${
-                        i === 2
-                          ? "border border-emerald-400/30 bg-emerald-400/15 text-emerald-400"
-                          : "text-gray-500 hover:text-gray-400"
-                      }`}
+                      className={`rounded-md px-2.5 py-1 text-[11px] transition ${i === 2 ? "border border-emerald-400/30 bg-emerald-400/15 text-emerald-400" : "text-gray-500 hover:text-gray-400"}`}
                     >
                       {t}
                     </button>
@@ -459,7 +451,6 @@ export default function Dashboard() {
               </ResponsiveContainer>
             </CardShell>
 
-            {/* Lead Sources */}
             <CardShell>
               <h3 className="mb-1 text-sm font-semibold">Lead Sources</h3>
               <p className="mb-5 text-xs text-gray-500">
@@ -524,19 +515,11 @@ export default function Dashboard() {
             </CardShell>
           </div>
 
-          {/* Row 3: Bar + Funnel */}
           <div
             className="mb-4 grid gap-4"
             style={{ gridTemplateColumns: "1fr 300px" }}
           >
-            {/* Pipeline by Stage */}
-            <CardShell
-              style={
-                {
-                  animation: "slideUp 0.6s ease 0.55s both",
-                } as React.CSSProperties
-              }
-            >
+            <CardShell style={{ animation: "slideUp 0.6s ease 0.55s both" }}>
               <h3 className="mb-1 text-sm font-semibold">Pipeline by Stage</h3>
               <p className="mb-6 text-xs text-gray-500">
                 Leads distributed across all stages
@@ -573,14 +556,7 @@ export default function Dashboard() {
               </ResponsiveContainer>
             </CardShell>
 
-            {/* Conversion Funnel */}
-            <CardShell
-              style={
-                {
-                  animation: "slideUp 0.6s ease 0.6s both",
-                } as React.CSSProperties
-              }
-            >
+            <CardShell style={{ animation: "slideUp 0.6s ease 0.6s both" }}>
               <h3 className="mb-1 text-sm font-semibold">Conversion Funnel</h3>
               <p className="mb-4 text-xs text-gray-500">Visitors → Customers</p>
               <div className="flex flex-col gap-2.5">
@@ -620,7 +596,6 @@ export default function Dashboard() {
             </CardShell>
           </div>
 
-          {/* Recent Leads */}
           <div
             className="overflow-hidden rounded-2xl border border-white/[0.07] bg-gradient-to-br from-white/[0.04] to-white/[0.02]"
             style={{ animation: "slideUp 0.6s ease 0.65s both" }}
@@ -636,18 +611,13 @@ export default function Dashboard() {
                 View all <ChevronRight size={13} />
               </button>
             </div>
-
             <div>
               {mockRecentLeads.map((lead, i) => {
                 const [from, to] = avatarGradients[i] ?? ["#6EE7B7", "#34D399"];
                 return (
                   <div
                     key={lead.id}
-                    className={`group flex cursor-pointer items-center px-6 py-4 transition-colors hover:bg-white/[0.02] ${
-                      i < mockRecentLeads.length - 1
-                        ? "border-b border-white/[0.04]"
-                        : ""
-                    }`}
+                    className={`group flex cursor-pointer items-center px-6 py-4 transition-colors hover:bg-white/[0.02] ${i < mockRecentLeads.length - 1 ? "border-b border-white/[0.04]" : ""}`}
                   >
                     <div
                       className="mr-3.5 flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[10px] text-[11px] font-bold text-[#0F111A]"
@@ -657,7 +627,6 @@ export default function Dashboard() {
                     >
                       {lead.avatar}
                     </div>
-
                     <div className="min-w-0 flex-1">
                       <div className="text-[13px] font-semibold text-gray-100">
                         {lead.name}
@@ -666,11 +635,9 @@ export default function Dashboard() {
                         {lead.company}
                       </div>
                     </div>
-
                     <div className="w-[90px] text-xs text-gray-500">
                       {lead.source}
                     </div>
-
                     <div className="w-[110px]">
                       <span
                         className={`rounded-md px-2.5 py-1 text-[11px] font-semibold ${statusClasses[lead.status]}`}
@@ -678,15 +645,12 @@ export default function Dashboard() {
                         {lead.status}
                       </span>
                     </div>
-
                     <div className="w-[90px] text-right font-mono text-[13px] font-semibold text-gray-100">
                       {lead.value}
                     </div>
-
                     <div className="w-[70px] text-right text-[11px] text-gray-600">
                       {lead.time}
                     </div>
-
                     <button className="ml-4 p-1 text-gray-600 transition hover:text-gray-400">
                       <MoreHorizontal size={16} />
                     </button>
